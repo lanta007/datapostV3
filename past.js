@@ -54,8 +54,8 @@ app3.post('/api/CreateDataPost', (req, res) => {
 
         console.log('path','datapost/'+ UserID+content+date+
         img1+img2+img3+list1+list2+list3+postID+thumbURL+title+like+tag)
-
-        set(ref(db,'datapost/'+UserID+"postID"+postID ),[
+ const post = (UserID+"postID"+postID );
+        set(ref(db,'datapost/'+post),[
             {
                "UserID":UserID,
                "content":content,
