@@ -19,8 +19,9 @@ const propertyNames = Object.keys(app3.post);
 const propertyValues = Object.values(app3.post);
 const entries = Object.entries(app3.post);
 
+
 //create datapost
-app3.post('/api/CreateDataPost', (req, res) => {  
+app3.post('/api/CreateDataPost', (req, res) => { 
     var postID = req.body.postID;
     var thumbURL = req.body.thumbURL;
     var title = req.body.title;
@@ -54,8 +55,8 @@ app3.post('/api/CreateDataPost', (req, res) => {
 
         console.log('path','datapost/'+ UserID+content+date+
         img1+img2+img3+list1+list2+list3+postID+thumbURL+title+like+tag)
- const post = (UserID+"postID"+postID );
-        set(ref(db,'datapost/'+post),[
+        const post = (UserID+"postID"+postID );
+        set(ref(db,'datapost/'+post),
             {
                "UserID":UserID,
                "content":content,
@@ -71,7 +72,7 @@ app3.post('/api/CreateDataPost', (req, res) => {
               "title": title, //ประกาศเป็น string
               "like": like,
               "tag": tag
-        }]
+        }
         );
         return res.status(200).json({
             RespCode: 200,
@@ -91,15 +92,20 @@ app3.get('/api/get', (req, res) => {
     try {
         get(ref(db,'datapost'))
         .then((snapshot) => {
+            let a = [];
+            snapshot.forEach(snap => {
+                a.push(snap.val());
+            })
             console.log(snapshot.val())
-            console.log(propertyNames);
-            console.log(propertyValues);
-            console.log(entries);
+            //console.log(propertyNames);
+            //console.log(propertyValues);
+            //console.log(entries);
+
             if( snapshot.exists() ) {
                 return res.status(200).json({
                     RespCode: 200,
                     RespMessage: 'good',
-                    Result: snapshot.val()
+                    Result: a
                 })
             }
             else {
