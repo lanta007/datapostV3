@@ -53,8 +53,8 @@ app3.post('/api/CreateDataPost', (req, res) => {
         console.log('path','datapost/'+ UserID+content+date+
         img1+img2+img3+list1+list2+list3+postID+thumbURL+title+like+tag)
 
-        set(ref(db,'datapost/'+UserID+postID ),[{
-            "DataPost":[{
+        set(ref(db,'datapost/'+UserID+"postID"+postID ),[
+            {
                "UserID":UserID,
                "content":content,
                "date":new Date()+'',
@@ -70,7 +70,7 @@ app3.post('/api/CreateDataPost', (req, res) => {
               "like": like,
               "tag": tag
         }]
-        }]);
+        );
         return res.status(200).json({
             RespCode: 200,
             RespMessage: 'Post created successfully.'
