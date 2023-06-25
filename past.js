@@ -2,8 +2,10 @@ import { initializeApp } from "firebase/app";
 import { getDatabase, set, ref, get, update, remove } from "firebase/database";
 import express  from 'express';
 import bodyParser  from "body-parser";
+import cors from 'cors';
 
 var app3 = express()
+app3.use(cors());
 app3.use(bodyParser.json());
 app3.use(bodyParser.urlencoded({extended: true}))
 var datapost = app3.listen(3001, console.log('server is running on port 3001'))
