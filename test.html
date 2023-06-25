@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Fire Base</title>
+
+    <style>
+        body {
+            margin: 0;
+            position: absolute;
+            top: 30%;
+            left: 50%;
+            margin-right: -50%;
+            transform: translate(-50%, -50%)
+        }
+
+        img {
+            height: 300px;
+        }
+
+        div {
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div><img src="logo.png"></div>
+
+    <div>
+
+        <input type="text" id="nameProduct">
+        <input type="file" id="uploadimage">
+        <input type="button" value="Upload" onclick="uploadBTN()">
+
+    </div>
+
+    <div style="margin-top: 20px;">
+        <button onclick="loadData()">Load Data</button>
+
+        <div id="fetchData">
+
+        </div>
+    </div>
+
+
+    <script>
+
+        const loadData = () => {
+            fetch(`https://benzcii3-60b91.firebaseio.com/product.json`).then(rest => {
+                return rest.json()
+            }).then(result => {
+                document.getElementById('fetchData').innerHTML = JSON.stringify(result)
+            })
+        }
+
+        const uploadBTN = () => {
+
+            let image = document.getElementById('uploadimage').files[0]
+
+            let nameproduct = document.getElementById('nameProduct').value
+
+            var myHeaders = new Headers();
+            myHeaders.append("Content-Type", image.type);
+
+            var requestOptions = {
+                method: 'POST',
+                headers: myHeaders,
+                body: image,
+            };
+
+            fetch(`https://firebasestorage.googleapis.com/v0/b/benzcii3-60b91.appspot.com/o?uploadType=media&name=${image.name}`, requestOptions)
+                .then(response => response.json())
+                .then((result) => {
+
+
+                    var myHeaders = new Headers();
+                    myHeaders.append("Content-Type", "application/json");
+
+                    var raw = JSON.stringify({
+                        "name": nameproduct,
+                        "image": `https://firebasestorage.googleapis.com/v0/b/benzcii3-60b91.appspot.com/o/${result.name}?alt=media&token=${result.downloadTokens}`
+                    });
+
+                    var requestOptions = {
+                        method: 'POST',
+                        headers: myHeaders,
+                        body: raw,
+                    };
+
+                    fetch("https://benzcii3-60b91.firebaseio.com/product.json", requestOptions)
+                        .then(response => response.json())
+                        .then(result => console.log(result))
+                        .catch(error => console.log('error', error));
+
+
+
+                })
+                .catch(error => console.log('error', error));
+
+        }
+    </script>
+
+</body>
+
+</html>
